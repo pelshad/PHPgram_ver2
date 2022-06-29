@@ -4,6 +4,7 @@
     const modal = document.querySelector("#newFeedModal");
     const body = modal.querySelector("#id-modal-body");
     const frmElem = modal.querySelector("form");
+    const btnClose = modal.querySelector('.btn-close');
 
     //이미지 값이 변하면
     frmElem.imgs.addEventListener("change", function (e) {
@@ -47,14 +48,10 @@
             method: "post",
             body: fData,
           })
-            .then((res) => res.json())
-            .then((myJson) => {
-              /*const closeBtn = modal.querySelector('.btn-close');
-                            closeBtn.click();
-
-                            if(feedObj && myJson.result) {
-                                feedObj.refreshList();
-                            }*/
+            .then(res => res.json())
+            .then(myJson => {
+              if(myJson.result){btnClose.click();}
+                            
             });
         });
       }
@@ -72,4 +69,69 @@
       body.appendChild(selFromComBtn);
     });
   }
+
+  const feedObj = {
+    limit: 20,
+    itemLength: 0,
+    currentPage: 1,
+    loadingElem: document.querySelector(".loading"),
+    conatainerElem : document.querySelector('#item_container'),
+
+    getFeedList: function () {
+      this.showLoading();
+      const param = {
+        page: this.currentPage++,
+      };
+      fetch("/feed/rest" + encodeQueryString(param))
+        .then(res => res.json())
+        .then(list => {
+          this.makeFeedList(list);
+        })
+        .catch(e => {
+          console.error(e);
+          this.hideLoading();
+        })
+    },
+
+    makeFeedList: function(list){
+      //파일 아이템들을 받음
+      if(list.length !== 0){
+        list.forEach(item => {
+          const divItem = this.makeFeedItem(item);
+          this.conatainerElem.appendChild(divItem);
+        });
+      }
+      this.hideLoading();
+    },
+  
+    makeFeedItem: function(item){
+      //받은 아이템 값을 넣음
+      console.log(item);
+      const divContainer = document.createElement('div');
+      divContainer.className = 'item mt-3 mb-3';
+
+      const divTop = document.createElement('div');
+      divContainer.appendChild(divTop);      
+
+      const regDtInfo = getDateTimeInfo(item.regdt);
+      divTop.className = 'd-flex flex-row ps-3 pe-3';
+      const writerImg = `<img src='/static/img/profile/${item.iuser}/${item.mainimg}'
+                         onerror='this.error=null';this.src="/static/img/profile/defaultProfileImg_100.png"'>`;
+      divTop.innerHTML = `
+        <div class="d-flex flex-column justify-content-center">
+          <div class="circleimg h40 w40">${writerImg}</div>
+        </div>
+        <div class="p-3 flex grow-1">
+          <div><span class="pointer" onclick="moveToProfile(${item.user});">${item.writer}</span> - ${regDtInfo}
+        </div>
+          <div class="location">${item.location === null ? '' : item.location}</div>
+        </div>`;
+      return divContainer;
+    },
+
+
+    showLoading: function () {this.loadingElem.classList.remove("d-none");},
+    hideLoading: function () {this.loadingElem.classList.add("d-none");},
+  };
+  feedObj.getFeedList();
 })();
