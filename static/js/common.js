@@ -1,7 +1,11 @@
 function encodeQueryString(params) {
-  const keys = Object.keys(params);
-  //encodeURIComponent 한글이 넘어오면 바이트 단위로 변경
-  return keys.length ? "?" + keys.map(key => encodeURIComponent(key) + "=" + encodeURIComponent(params[key])).join("&") : "";
+    const keys = Object.keys(params);
+    return keys.length 
+            ? "?" + keys.map(key => 
+                        encodeURIComponent(key) + "=" + 
+                        encodeURIComponent(params[key])
+                    ).join("&")
+            : "";
 }
 
 function getDateTimeInfo(dt) {

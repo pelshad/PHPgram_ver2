@@ -28,7 +28,7 @@ class FeedModel extends Model
         return $this->pdo->lastInsertID();
     }*/
 
-    /*public function insFeedImg(&$param)
+    public function insFeedImg(&$param)
     {
         $sql = "INSERT INTO t_feed_img
                 (ifeed, img)
@@ -37,7 +37,7 @@ class FeedModel extends Model
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute(array($param["ifeed"], $param["img"]));
         return $stmt->rowCount();
-    }*/
+    }
     public function selFeedList(&$param)
     {
         $sql = "SELECT A.ifeed, A.location, A.ctnt, A.iuser, A.regdt, C.nm
@@ -64,6 +64,12 @@ class FeedModel extends Model
                 LIMIT :startIdx, :feedItemCnt";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute(array($param["iuser"], $param["startIdx"], _FEED_ITEM_CNT));
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    }
+    public function selFeedImgList($param){
+        $sql = "SELECT img FROM t_feed_img WHERE ifeed = :ifeed";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(array($param->ifeed));
         return $stmt->fetchAll(PDO::FETCH_OBJ);
     }
 }

@@ -52,8 +52,15 @@ class FeedController extends Controller {
                 $param = [
                     "startIdx" => $startIdx,
                     "iuser" => getIuser()
-                ];                
-                return $this->model->selFeedList($param);
+                ];
+                //feed/rest?page=1
+                //이미지 정보는 객체기때문에 foreach를 돌림
+                $list = $this->model->selFeedList($param);
+                foreach($list as $item){
+                    $imgs = $this->model->selFeedImgList($item);
+                    $item->imgList = $imgs;
+                }
+                return $list;
         }
     }
 }
