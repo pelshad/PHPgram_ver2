@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="/static/css/common.css">
     <?php 
         if(isset($this->css)) {
+            //CSS임포트용 FeedController 6,7번줄
             foreach($this->css as $item) {
                 $href = strpos($item, "http") === 0 ? $item : "/static/css/{$item}.css";
                 echo "<link rel='stylesheet' href='{$href}'>

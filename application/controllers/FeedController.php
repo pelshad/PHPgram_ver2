@@ -3,8 +3,8 @@ namespace application\controllers;
 
 class FeedController extends Controller {
     public function index() {
-        $this->addAttribute(_JS, ["feed/index"]);
-        $this->addAttribute(_CSS, ["feed/index"]);
+        $this->addAttribute(_JS, ["feed/index", "https://unpkg.com/swiper@8/swiper-bundle.min.js"]);        
+        $this->addAttribute(_CSS, ["feed/index", "https://unpkg.com/swiper@8/swiper-bundle.min.css"]);        
         $this->addAttribute(_MAIN, $this->getView("feed/index.php"));
         return "template/t1.php";
     }
@@ -52,15 +52,31 @@ class FeedController extends Controller {
                 $param = [
                     "startIdx" => $startIdx,
                     "iuser" => getIuser()
-                ];
-                //feed/rest?page=1
-                //이미지 정보는 객체기때문에 foreach를 돌림
-                $list = $this->model->selFeedList($param);
-                foreach($list as $item){
-                    $imgs = $this->model->selFeedImgList($item);
-                    $item->imgList = $imgs;
-                }
+                ];    
+                $list = $this->model->selFeedList($param);                
+                foreach($list as $item) {                 
+                    $item->imgList = $this->model->selFeedImgList($item);
+                }                
                 return $list;
         }
     }
+        public function fav(){
+            $UrlPaths = getUrlPaths();
+            if(!isset($UrlPaths[2])){
+                exit();
+            }
+            $param = [
+                "ifeed" => intval($UrlPaths[2]),
+                "iuser" => getIuser()
+            ];
+
+            switch(getMethod()){
+                case _POST:
+                    
+                    return [_RESULT => $this->model->insFeedFav($param)];
+                case _DELETE:
+                    
+                    return [_RESULT => $this->model->delFeedFav($param)];
+            }
+        }
 }
