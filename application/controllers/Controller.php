@@ -7,6 +7,7 @@ class Controller {
         "feed",
         "user/feedwin"
     ];
+    
 
     public function __construct($action, $model) {    
         if(!isset($_SESSION)) {
@@ -14,11 +15,12 @@ class Controller {
         }    
         $urlPaths = getUrl();
         foreach(static::$needLoginUrlArr as $url) {
+            //로그인하지 않고 $needLoginUrlArr에 있는 주소값으로 갈때 오류(리다이렉트)
             if(strpos( $urlPaths, $url) === 0 && !isset($_SESSION[_LOGINUSER]) ) {
                 //echo "권한이 없습니다.";
                 //exit();
                 $this->getView("redirect:/user/signin");
-            }
+            } 
         }
 
         $this->model = $model;
