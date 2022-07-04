@@ -60,29 +60,48 @@ class UserController extends Controller
         $param = [ "feediuser" => $iuser,
                     "loginiuser" => getIuser() ];
         $this->addAttribute(_DATA, $this->model->selUserProfile($param));
-        $this->addAttribute(_JS, ["feed/index", "https://unpkg.com/swiper@8/swiper-bundle.min.js"]);
-        $this->addAttribute(_CSS, ["feed/feedwin", "https://unpkg.com/swiper@8/swiper-bundle.min.css"]);
+        $this->addAttribute(_JS, ["user/feedwin", "https://unpkg.com/swiper@8/swiper-bundle.min.js"]);
+        $this->addAttribute(_CSS, ["user/feedwin", "https://unpkg.com/swiper@8/swiper-bundle.min.css", "feed/index"]);
         $this->addAttribute(_MAIN, $this->getView("user/feedwin.php"));
         return "template/t1.php";
+        
+    }
+
+    public function feed(){
+        if(getMethod() === _GET){
+            $page = 1;
+            if(isset($_GET["page"])) {
+                $page = intval($_GET["page"]);
+            }
+            $startIdx = ($page - 1) * _FEED_ITEM_CNT;
+            $param = [
+                "startIdx" => $startIdx,
+                "iuser" => getIuser()
+            ];    
+            $list = $this->model->selFeedList($param);                
+            foreach($list as $item) {                 
+                $item->imgList = $this->model->selFeedImgList($item);
+            }                
+            return $list;
+        }
     }
 
     public function follow(){
         //toIuser
+        $param = [
+            'fromiuser' => getIuser()
+        ];
         
         switch(getMethod()){
             case _POST:
-                $iuser = isset($_POST["toiuser"]) ? intval($_POST["toiuser"]) : 0;
-                $param = [ "toiuser" => $iuser,
-                           "fromiuser" => getIuser() ];
-                $this->model->insFollow($param);
-                return [_RESULT => 1];
+                $json = getJson();
+                $param["toiuser"] = $json["toiuser"];
+                return [_RESULT => $this->model->insUserFollow($param)];
 
             case _DELETE:
-                $iuser = isset($_GET["toiuser"]) ? intval($_GET["toiuser"]) : 0;
-                $param = ["toiuser" => $iuser,
-                          "fromiuser" => getIuser() ];
-                          $this->model->delFollow($param);
-                return [_RESULT => 1];
+                $param["toiuser"] = $_GET["toiuser"];
+                return [_RESULT => $this->model->delUserFollow($param)];
         }
     }
+
 }
