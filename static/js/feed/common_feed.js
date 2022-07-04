@@ -95,7 +95,7 @@ const feedObj = {
             }
 
             fetch(`/feed/fav/${item.ifeed}`, {
-                'method': method,
+                'method': method, //93번 줄 if문에 걸리면 DELETE, 안걸리면 POST
             }).then(res => res.json())
             .then(res => {                    
                 if(res.result) {
@@ -152,7 +152,32 @@ const feedObj = {
             <input type="text" class="flex-grow-1 my_input back_color p-2" placeholder="댓글을 입력하세요...">
             <button type="button" class="btn btn-outline-primary">등록</button>
         `;
+        const inputCmt = divCmtForm.querySelector('input');
+        const btnCmtReg = divCmtForm.querySelector('button');
+        btnCmtReg.addEventListener('click', e => {
 
+            //댓글 json 통신 시작
+            const param = {
+                ifeed: item.ifeed,
+                cmt: inputCmt.value
+            };
+            fetch('/feedcmt/index', {
+                method:'POST',
+                body: JSON.stringify(param)
+            })
+            .then(res=>res.json())
+            .then(res=>{
+                console.log('icmt : ' + res.result);
+                if(res.result){
+                    inputCmt.value = '';
+                    //댓글 공간에 댓글 내용추가
+                }
+            })
+            // 통신 끝
+
+            console.log(inputCmt.value);
+            
+        })
         return divContainer;
     },
 

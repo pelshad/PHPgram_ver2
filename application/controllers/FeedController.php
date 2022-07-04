@@ -1,5 +1,6 @@
 <?php
 namespace application\controllers;
+use application\libs\Application;
 
 class FeedController extends Controller {
     public function index() {
@@ -13,7 +14,7 @@ class FeedController extends Controller {
         switch(getMethod()) {
             case _POST:
                 if(!is_array($_FILES) || !isset($_FILES["imgs"])) {
-                    return ["result" => 0];
+                    return [_RESULT => 0];
                 }
                 $iuser = getIuser();
                 $param = [
@@ -54,8 +55,12 @@ class FeedController extends Controller {
                     "iuser" => getIuser()
                 ];    
                 $list = $this->model->selFeedList($param);                
-                foreach($list as $item) {                 
+                foreach($list as $item) {      
+                    //feedcmtmodel selfeedcmt함수에 값 보내기           
                     $item->imgList = $this->model->selFeedImgList($item);
+                    $param2 = ["ifeed" => $item->ifeed];
+                    $item->cmt = Application::getModel("feedcmt")->selFeedCmt($param2);
+                    
                 }                
                 return $list;
         }
