@@ -57,11 +57,32 @@ class UserController extends Controller
 
     public function feedwin(){
         $iuser = isset($_GET["iuser"]) ? intval($_GET["iuser"]) : 0;
-        $param = [ "iuser" => $iuser ];
-        $this->addAttribute(_DATA, $this->model->selUserByIuser($param));
+        $param = [ "feediuser" => $iuser,
+                    "loginiuser" => getIuser() ];
+        $this->addAttribute(_DATA, $this->model->selUserProfile($param));
         $this->addAttribute(_JS, ["feed/index", "https://unpkg.com/swiper@8/swiper-bundle.min.js"]);
         $this->addAttribute(_CSS, ["feed/feedwin", "https://unpkg.com/swiper@8/swiper-bundle.min.css"]);
         $this->addAttribute(_MAIN, $this->getView("user/feedwin.php"));
         return "template/t1.php";
+    }
+
+    public function follow(){
+        //toIuser
+        
+        switch(getMethod()){
+            case _POST:
+                $iuser = isset($_POST["toiuser"]) ? intval($_POST["toiuser"]) : 0;
+                $param = [ "toiuser" => $iuser,
+                           "fromiuser" => getIuser() ];
+                $this->model->insFollow($param);
+                return [_RESULT => 1];
+
+            case _DELETE:
+                $iuser = isset($_GET["toiuser"]) ? intval($_GET["toiuser"]) : 0;
+                $param = ["toiuser" => $iuser,
+                          "fromiuser" => getIuser() ];
+                          $this->model->delFollow($param);
+                return [_RESULT => 1];
+        }
     }
 }

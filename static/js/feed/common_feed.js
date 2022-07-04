@@ -12,7 +12,7 @@ const feedObj = {
                 this.containerElem.appendChild(divItem);
             });
         }
-
+        
         if(this.swiper !== null) { this.swiper = null; }
         this.swiper = new Swiper('.swiper', {
             navigation: {
@@ -31,7 +31,7 @@ const feedObj = {
         console.log(item);
         const divContainer = document.createElement('div');
         divContainer.className = 'item mt-3 mb-3';
-
+        
         const divTop = document.createElement('div');
         divContainer.appendChild(divTop);
 
@@ -67,7 +67,7 @@ const feedObj = {
             <div class="swiper-button-next"></div>
         `;
         const divSwiperWrapper = divImgSwiper.querySelector('.swiper-wrapper');
-
+                    
         item.imgList.forEach(function(imgObj) {
             const divSwiperSlide = document.createElement('div');
             divSwiperWrapper.appendChild(divSwiperSlide);
@@ -88,7 +88,7 @@ const feedObj = {
         heartIcon.className = 'fa-heart pointer rem1_5 me-3';
         heartIcon.classList.add(item.isFav === 1 ? 'fas' : 'far');
         heartIcon.addEventListener('click', e => {
-
+            
             let method = 'POST';
             if(item.isFav === 1) { //delete (1은 0으로 바꿔줘야 함)
                 method = 'DELETE';
@@ -223,7 +223,7 @@ function moveToFeedWin(iuser) {
                                 btnClose.click();
                            }
                         });
-
+                        
                 });
             }
         });
