@@ -105,9 +105,9 @@ class FeedModel extends Model
                 ON A.iuser = C.iuser               
                 WHERE A.ifeed = :ifeed
                 ORDER BY A.ifeed DESC";
-        $stmt = $this->pdo->prepare($sql);      
-        $stmt->execute($param["ifeed"]);
-        return $stmt->fetch(PDO::FETCH_OBJ);        
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(array($param["ifeed"]));
+        return $stmt->fetch(PDO::FETCH_OBJ);
     }
 
 }
