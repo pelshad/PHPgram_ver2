@@ -10,6 +10,7 @@ if(feedObj) {
     const lData = document.querySelector('#lData');
     const btnFollow = document.querySelector('#btnFollow');
     const btnDelCurrentProfilePic = document.querySelector('#btnDelCurrentProfilePic');
+    const btnProfileImgModalClose = document.querySelector('#btnProfileImgModalClose');
 
     if(btnFollow) {
         btnFollow.addEventListener('click', function() {
@@ -63,10 +64,22 @@ if(feedObj) {
             }
         });
     }
-
+    //프로필 사진 변경 json
     if(btnDelCurrentProfilePic){
         btnDelCurrentProfilePic.addEventListener('click', e=>{
-            
+            fetch('/user/profile', { method: 'DELETE'})
+            .then(res => res.json)
+            .then(res => {
+                if(res.result){
+                    const profileImgList = document.querySelectorAll('.profileimg');
+                    profileImgList.forEach(item => {
+                        item.src = '/static/img/profile/defaultProfileImg_100.png';
+                    })
+                    
+                    
+                }
+                btnProfileImgModalClose.click();
+            })
         })
     }
 })();

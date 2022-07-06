@@ -64,11 +64,9 @@
                 <span id="btnDelCurrentProfilePic" class="f-red bold pointer">현재 사진 삭제</span>
             </div>
             <div class="_modal_item">
-                <span class="f-black pointer" data-bs-dismiss="modal">취소</span>
+                <span class="f-black pointer" id="btnProfileImgModalClose" data-bs-dismiss="modal">취소</span>
             </div>
 
-            <form class="d-none">
-                <input type="file" accept="image/*" name="imgs" multiple>
-            </form>
+            
         </div>
     </div>

@@ -87,6 +87,7 @@
                     // ::스태틱 메소드 호출
                     $param2 = ["ifeed" => $item->ifeed];
                     $item->imgList = Application::getModel("feed")->selfeedImgList($param2);
+                    $item->cmt = Application::getModel("feedcmt")->selFeedCmt($param2);
                 }
                 //스태틱 메소드 호출은 ::
                 //스태틱이 아닌 메소드는 객체화 한 이후 호출
@@ -121,7 +122,7 @@
                 case _DELETE:
                     //getLoginUser의 mainimg값 찾기
                     $loginUser = getLoginUser();
-                    if($loginUser){
+                    if($loginUser && $loginUser->mainimg !== null){
                         $path = "static/img/profile/{$loginUser->iuser}/{$loginUser->mainimg}";
                         if(file_exists($path) && unlink($path)){
                             $param = ["iuser" => $loginUser->iuser, "delMainImg" => 1];
