@@ -24,7 +24,7 @@ getFeedList();
 
 (function () {
     const gData = document.querySelector("#gData");
-
+    const spanCntfollower = document.querySelector('#spanCntFollower');
     const btnFollow = document.querySelector("#btnFollow");
     if (btnFollow) {
         btnFollow.addEventListener("click", function () {
@@ -36,10 +36,10 @@ getFeedList();
         console.log("follow : " + follow);
         const followUrl = "/user/follow";
         switch (follow) {
-            case "1": //팔로우 취소
+            case "1": //팔로우 취소 시 버튼 모양 변경
             fetch(followUrl + encodeQueryString(param), { method: "DELETE" })
                 .then((res) => res.json())
-                .then((res) => {
+                .then((res) => { 
                     if (res.result) {
                         btnFollow.dataset.follow = '0';
                         btnFollow.classList.remove('btn-outline-secondary');
@@ -49,10 +49,12 @@ getFeedList();
                         } else {
                             btnFollow.innerText = '팔로우';
                         }
+                        //follower - 1   ~~객체명 = parseInt
+                        spanCntfollower.innerText = ~~spanCntfollower.innerText - 1;
                     }
                 });
             break;
-            case "0": //팔로우 등록
+            case "0": //팔로우 등록 시 버튼 모양 변경
                 fetch(followUrl, {
                     method: 'POST',
                     body: JSON.stringify(param)
@@ -65,6 +67,8 @@ getFeedList();
                         btnFollow.classList.remove('btn-primary');
                         btnFollow.innerText = '팔로우 취소';
                     }
+                    //follower + 1
+                    spanCntfollower.innerText = ~~spanCntfollower.innerText + 1;
                 });
             break;
         }

@@ -78,13 +78,15 @@
                 $startIdx = ($page - 1) * _FEED_ITEM_CNT;
                 $param = [
                     "startIdx" => $startIdx,
-                    "iuser" => $_GET["iuser"]
+                    "toiuser" => $_GET["iuser"],
+                    "loginiuser" => getIuser()
                 ];
 
                 $list = $this->model->selFeedList($param);
                 foreach ($list as $item) {
                     // ::스태틱 메소드 호출
-                    $item->imgList = Application::getModel("feed")->selFeedImgList($item);
+                    $param2 = ["ifeed" => $item->ifeed];
+                    $item->imgList = Application::getModel("feed")->selfeedImgList($param2);
                 }
                 //스태틱 메소드 호출은 ::
                 //스태틱이 아닌 메소드는 객체화 한 이후 호출

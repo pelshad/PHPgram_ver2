@@ -9,7 +9,7 @@
                 </div>
             </div>
 
-            <div class="flex-grow-1 d-flex flex-column justify-content-evenly">
+            <div class="flex-grow-1 d-flex flex-column justify-content-evenly followContainer">
                 <div><?= $this->data->email ?>
                     <?php
                     if ($this->data->iuser === getIuser()) {
@@ -34,8 +34,8 @@
 
                 <div class="d-flex flex-row">
                     <div class="flex-grow-1 me-3">게시물 <span class="bold"><?= $this->data->feedCnt ?></span></div>
-                    <div class="flex-grow-1 me-3">팔로워 <span class="bold"><?= $this->data->followerCnt ?></span></div>
-                    <div class="flex-grow-1">팔로우 <span class="bold"><?= $this->data->followCnt ?></span></div>
+                    <div class="flex-grow-1 me-3">팔로워 <span class="bold" id="spanCntFollower"><?= $this->data->followerCnt ?></span></div>
+                    <div class="flex-grow-1">팔로우 <span class="bold following"><?= $this->data->followCnt ?></span></div>
                 </div>
                 <div class="bold"><?= $this->data->nm ?></div>
                 <div><?= $this->data->cmt ?></div>

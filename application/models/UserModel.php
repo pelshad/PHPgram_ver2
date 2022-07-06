@@ -72,33 +72,37 @@
 
     //---------------------- Feed -------------------------//
 
-    public function selFeedList(&$param) {
-        $iuser = $param["iuser"];
-        $sql = "SELECT A.ifeed, A.location, A.ctnt, A.iuser, A.regdt, C.nm
-                AS writer, C.mainimg,
-
-                IFNULL(E.cnt, 0) AS favCnt,
-                IF(F.ifeed IS NULL, 0, 1) AS isFav
-
-                FROM t_feed A INNER JOIN t_user C ON A.iuser = C.iuser AND C.iuser = {$iuser}
-
-                LEFT JOIN (
-                    SELECT ifeed, COUNT(ifeed) AS cnt
-                    FROM t_feed_fav GROUP BY ifeed
-                ) E
+    public function selFeedList(&$param) {       
+        $sql = "SELECT A.ifeed, A.location, A.ctnt, A.iuser, A.regdt
+                    , C.nm AS writer, C.mainimg
+                    , IFNULL(E.cnt, 0) AS favCnt
+                    , IF(F.ifeed IS NULL, 0, 1) AS isFav
+                FROM t_feed A
+                INNER JOIN t_user C
+                ON A.iuser = C.iuser
+                AND C.iuser = :toiuser
+                LEFT JOIN 
+                    (
+                        SELECT ifeed, COUNT(ifeed) AS cnt 
+                        FROM t_feed_fav
+                        GROUP BY ifeed
+                    ) E
                 ON A.ifeed = E.ifeed
-
-                LEFT JOIN (
-                    SELECT ifeed
-                    FROM t_feed_fav WHERE iuser = {$iuser}
-                ) F
+                LEFT JOIN
+                    (
+                        SELECT ifeed
+                        FROM t_feed_fav
+                        WHERE iuser = :loginiuser
+                    ) F
                 ON A.ifeed = F.ifeed
-
                 ORDER BY A.ifeed DESC
                 LIMIT :startIdx, :feedItemCnt";
-
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute(array($param["startIdx"], _FEED_ITEM_CNT));
+        $stmt->bindValue(":toiuser", $param["toiuser"]);
+        $stmt->bindValue(":loginiuser", $param["loginiuser"]);
+        $stmt->bindValue(":startIdx", $param["startIdx"]);
+        $stmt->bindValue(":feedItemCnt", _FEED_ITEM_CNT);
+        $stmt->execute();
 
         return $stmt->fetchAll(PDO::FETCH_OBJ);
         }

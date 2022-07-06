@@ -38,11 +38,11 @@ class FeedModel extends Model
         $stmt->execute(array($param["ifeed"], $param["img"]));
         return $stmt->rowCount();
     }
+
     public function selFeedList(&$param)
     {
         $sql = "SELECT A.ifeed, A.location, A.ctnt, A.iuser, A.regdt, C.nm
                 AS writer, C.mainimg,
-
                 IFNULL(E.cnt, 0) AS favCnt,
                 IF(F.ifeed IS NULL, 0, 1) AS isFav
 
@@ -66,12 +66,14 @@ class FeedModel extends Model
         $stmt->execute(array($param["iuser"], $param["startIdx"], _FEED_ITEM_CNT));
         return $stmt->fetchAll(PDO::FETCH_OBJ);
     }
+
     public function selFeedImgList($param){
         $sql = "SELECT img FROM t_feed_img WHERE ifeed = :ifeed";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute(array($param->ifeed));
+        $stmt->execute(array($param["ifeed"]));
         return $stmt->fetchAll(PDO::FETCH_OBJ);
     }
+
     /*     fav     */
     public function insFeedFav(&$param){
         $sql = "INSERT INTO t_feed_fav
@@ -91,6 +93,21 @@ class FeedModel extends Model
         $stmt = $this->pdo->prepare($sql);
         $result = $stmt->execute(array($param["ifeed"], $param["iuser"]));
         return $result;
+    }
+
+    public function selFeedAfterReg(&$param) {
+        $sql = "SELECT A.ifeed, A.location, A.ctnt, A.iuser, A.regdt
+                    , C.nm AS writer, C.mainimg
+                    , 0 AS favCnt
+                    , 0 AS isFav
+                FROM t_feed A
+                INNER JOIN t_user C
+                ON A.iuser = C.iuser               
+                WHERE A.ifeed = :ifeed
+                ORDER BY A.ifeed DESC";
+        $stmt = $this->pdo->prepare($sql);      
+        $stmt->execute($param["ifeed"]);
+        return $stmt->fetch(PDO::FETCH_OBJ);        
     }
 
 }

@@ -10,7 +10,10 @@ class FeedCmtController extends Controller{
                 $json["iuser"] = getIuser();
                 return [_RESULT => $this->model->insfeedCmt($json)];
 
-            case _DELETE:
+            case _GET:
+                $ifeed = isset($_GET["ifeed"]) ? intval($_GET["ifeed"]) : 0;
+                $param = ["ifeed" => $ifeed];
+                return $this->model->selFeedCmtList($param);
         }
     }
 }
