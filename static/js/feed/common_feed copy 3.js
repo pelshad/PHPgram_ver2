@@ -151,15 +151,19 @@ const feedObj = {
         divContainer.appendChild(divBtns);
         divBtns.className = 'favCont p-3 d-flex flex-row';
 
-        
-        
-
         const heartIcon = document.createElement('i');
         divBtns.appendChild(heartIcon);
         heartIcon.className = 'fa-heart pointer rem1_5 me-3';
         heartIcon.classList.add(item.isFav === 1 ? 'fas' : 'far');
+
+        //
+        const divFav = document.createElement('div');
+        divContainer.appendChild(divFav);
+        divFav.className = 'p-3';
+        const spanFavCnt = document.createElement('span');
+        //
+
         heartIcon.addEventListener('click', e => {
-            
             let method = 'POST';
             if(item.isFav === 1) { //delete (1은 0으로 바꿔줘야 함)
                 method = 'DELETE';
@@ -171,21 +175,29 @@ const feedObj = {
             .then(res => {                    
                 if(res.result) {
                     item.isFav = 1 - item.isFav; // 0 > 1, 1 > 0
-                     // 좋아요 취소
-                     if(item.isFav === 0){
+                    if(item.isFav === 0) { // 좋아요 취소
                         heartIcon.classList.remove('fas');
                         heartIcon.classList.add('far');
-                        item.favCnt--;
-                        if(item.favCnt === 0) {
-                            divFav.classList.add('d-none');
+                        //
+                        if(item.favCnt === 0){
+                            divFav.removeChild(spanFavCnt);
+                        } else {
+                            spanFavCnt.innerHTML.replace = `좋아요 ${item.favCnt - 1}개`;
                         }
+                        //
                     } else { // 좋아요 처리
                         heartIcon.classList.remove('far');
                         heartIcon.classList.add('fas');
-                        item.favCnt++;
-                        divFav.classList.remove('d-none')
+                        //
+                        if(item.favCnt === 0){
+                            divFav.appendChild(spanFavCnt);
+                            spanFavCnt.className = 'bold';
+                            spanFavCnt.innerHTML = `좋아요 ${item.favCnt}개`;
+                        } else {
+                            spanFavCnt.innerHTML.replace = `좋아요 ${item.favCnt + 1}개`;
+                        }
+                        //
                     }
-                    spanFavCnt.innerHTML = `좋아요 ${item.favCnt}개`;
                 } else {
                     alert('좋아요를 할 수 없습니다.');
                 }
@@ -201,15 +213,7 @@ const feedObj = {
         divDm.className = 'pointer';
         divDm.innerHTML = `<svg aria-label="다이렉트 메시지" class="_8-yf5 " color="#262626" fill="#262626" height="24" role="img" viewBox="0 0 24 24" width="24"><line fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2" x1="22" x2="9.218" y1="3" y2="10.083"></line><polygon fill="none" points="11.698 20.334 22 3.001 2 3.001 9.218 10.084 11.698 20.334" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></polygon></svg>`;
 
-        const divFav = document.createElement('div');
-        divContainer.appendChild(divFav);
-        divFav.className = 'p-3 d-none';
-        const spanFavCnt = document.createElement('span');
-        divFav.appendChild(spanFavCnt);
-        spanFavCnt.className = 'bold';
-        spanFavCnt.innerHTML = `좋아요 ${item.favCnt}개`;
-
-        if(item.favCnt > 0) { divFav.classList.remove('d-none'); }
+        
 
         if(item.ctnt !== null && item.ctnt !== '') {
             const divCtnt = document.createElement('div');

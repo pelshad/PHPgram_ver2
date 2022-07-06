@@ -114,4 +114,24 @@
                     return [_RESULT => $this->model->delUserFollow($param)];
             }
         }
+        //프로필
+        public function profile(){
+            switch(getMethod()){
+                //프로필 사진 삭제
+                case _DELETE:
+                    //getLoginUser의 mainimg값 찾기
+                    $loginUser = getLoginUser();
+                    if($loginUser){
+                        $path = "static/img/profile/{$loginUser->iuser}/{$loginUser->mainimg}";
+                        if(file_exists($path) && unlink($path)){
+                            $param = ["iuser" => $loginUser->iuser, "delMainImg" => 1];
+                            if($this->model->updUser($param)){
+                                $loginUser->mainimg = null;
+                                return [_RESULT => 1];
+                            }
+                        }
+                    }
+                    return [_RESULT => 0];
+            }
+        }
     }

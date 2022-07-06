@@ -8,8 +8,9 @@ if(feedObj) {
 (function() {
     const spanCntFollower = document.querySelector('#spanCntFollower');
     const lData = document.querySelector('#lData');
-
     const btnFollow = document.querySelector('#btnFollow');
+    const btnDelCurrentProfilePic = document.querySelector('#btnDelCurrentProfilePic');
+
     if(btnFollow) {
         btnFollow.addEventListener('click', function() {
             const param = {
@@ -63,4 +64,9 @@ if(feedObj) {
         });
     }
 
+    if(btnDelCurrentProfilePic){
+        btnDelCurrentProfilePic.addEventListener('click', e=>{
+            
+        })
+    }
 })();

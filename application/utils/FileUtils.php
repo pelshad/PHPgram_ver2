@@ -1,5 +1,7 @@
 <?php
-session_start();
+function dleFile($path){
+    unlink($path);
+}
 
 function getRandomFileNm($fileName)
 {
