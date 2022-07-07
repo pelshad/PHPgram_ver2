@@ -57,8 +57,11 @@
                 <h5 class="modal-title f-black bold">프로필 사진 바꾸기</h5>
             </div>
 
-            <div class="_modal_item">
-                <span class="f-blue bold pointer">사진 업로드</span>
+            <div class="_modal_item" id="upload">
+                <span class="f-blue bold pointer" id="btnProfileMod">사진 업로드</span>
+                <form class="d-none">
+                    <input type="file" accept="image/*" name="imgs" multiple>
+                </form>
             </div>
             <div class="_modal_item">
                 <span id="btnDelCurrentProfilePic" class="f-red bold pointer">현재 사진 삭제</span>

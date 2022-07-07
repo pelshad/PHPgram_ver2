@@ -83,3 +83,58 @@ if(feedObj) {
         })
     }
 })();
+
+
+//프로필 이미지 수정
+(function() {
+    if(btnProfileMod) {
+        const profileModal = document.querySelector('#upload');
+        const profileElem = profileModal.querySelector('form');
+        const profileBtnClose = document.querySelector('#btnProfileImgModalClose');
+
+        //사진 업로드 버튼 선택
+        const btnProfileMod = document.querySelector('#btnProfileMod');
+        //사진 업로드 버튼을 눌렀을때 이벤트
+        btnProfileMod.addEventListener('click', function() {
+        profileElem.imgs.click();
+        });
+        //작동 확인 완료
+        
+        
+        //이미지 값이 변하면
+        profileElem.imgs.addEventListener('change', function(e) {
+            console.log(`length: ${e.target.files.length}`);
+            
+            if(e.target.files.length > 0) {
+                const profileImgSource = e.target.files[0];
+
+                const profileReader = new FileReader();
+                profileReader.readAsDataURL(profileImgSource);
+                const files = profileElem.imgs.files;
+
+                const pData = new FormData();
+                
+                pData.append('imgs', files[0]);
+                console.log(`pData : ${pData.imgs}`);
+                
+                fetch('/user/profile', {
+                    method: 'post',
+                    body: pData})
+                    .then(res => res.json())
+                    .then(myJson => {
+                    console.log(myJson);
+                    if(myJson) {                                
+                        profileBtnClose.click();
+                        
+                    }
+                    });
+            }
+        }); 
+        
+        //사진 업로드를 눌렀을때
+        
+    }
+
+    
+
+})();

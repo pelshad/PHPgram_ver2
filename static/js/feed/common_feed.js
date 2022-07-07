@@ -330,7 +330,6 @@ function moveToFeedWin(iuser) {
                 const shareBtnElem = body.querySelector('button');
                 shareBtnElem.addEventListener('click', function() {
                     const files = frmElem.imgs.files;
-
                     const fData = new FormData();
                     for(let i=0; i<files.length; i++) {
                         fData.append('imgs[]', files[i]);
@@ -347,7 +346,6 @@ function moveToFeedWin(iuser) {
 
                            if(myJson) {                                
                                 btnClose.click();
-
                                 const lData = document.querySelector('#lData');
                                 const gData = document.querySelector('#gData');
                                 if(lData && lData.dataset.toiuser !== gData.dataset.loginiuser) { return; }
@@ -376,4 +374,7 @@ function moveToFeedWin(iuser) {
         });
     }
 
+
+
 })();
+

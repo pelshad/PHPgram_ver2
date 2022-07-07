@@ -132,6 +132,43 @@
                             }
                         }
                     }
+                case _POST:
+                    if(!is_array($_FILES) || !isset($_FILES["imgs"])) {
+                        return [_RESULT => 0];
+                    }
+                    $iuser = getLoginUser()->iuser;
+                    $profileImg = getMainImgSrc();
+
+                    $path = "static/img/profile/{$profileImg}";
+                    unlink($path);
+                    
+                    $profileFiles = $_FILES["imgs"]["name"];
+                    $saveDirectory = _IMG_PATH . "/profile/" . $iuser;
+                    if(!is_dir($saveDirectory)) {
+                        mkdir($saveDirectory, 0777, true);
+                    }
+
+                    $loginUser = getLoginUser();
+                    if($loginUser && $loginUser->mainimg !== null){
+                        $path = "static/img/profile/{$loginUser->iuser}/{$loginUser->mainimg}";
+                        if(file_exists($path) && unlink($path)){}}
+                    
+
+                    $tempName = $_FILES['imgs']['tmp_name'];
+                    $randomFileNm = getRandomFileNm($profileFiles);
+
+                    if(move_uploaded_file($tempName, $saveDirectory . "/" . $randomFileNm)) {
+                        $param = [
+                            "iuser" => $iuser,
+                            "mainimg" => $randomFileNm
+                        ];
+                        if($this->model->updUser($param)){
+                            $loginUser->mainimg = $randomFileNm;
+                        }}
+                        
+                    return [_RESULT => 2];
+
+
                     return [_RESULT => 0];
             }
         }
