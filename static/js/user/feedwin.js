@@ -64,19 +64,19 @@ if(feedObj) {
             }
         });
     }
-    //프로필 사진 변경 json
+    //프로필 사진 삭제
     if(btnDelCurrentProfilePic){
         btnDelCurrentProfilePic.addEventListener('click', e=>{
+            //기존 프로필 이미지를 디폴트로 변경
+            const profileImgList = document.querySelectorAll('.profileimg');
+                    profileImgList.forEach(item => {
+                        item.src = '/static/img/profile/defaultProfileImg_100.png';
+                    })
+            //usermodel profile함수와 통신
             fetch('/user/profile', { method: 'DELETE'})
             .then(res => res.json)
             .then(res => {
                 if(res.result){
-                    const profileImgList = document.querySelectorAll('.profileimg');
-                    profileImgList.forEach(item => {
-                        item.src = '/static/img/profile/defaultProfileImg_100.png';
-                    })
-                    
-                    
                 }
                 btnProfileImgModalClose.click();
             })
@@ -104,12 +104,20 @@ if(feedObj) {
         //이미지 값이 변하면
         profileElem.imgs.addEventListener('change', function(e) {
             console.log(`length: ${e.target.files.length}`);
+            const profileImgList = document.querySelectorAll('.profileimg');
             
             if(e.target.files.length > 0) {
                 const profileImgSource = e.target.files[0];
 
-                const profileReader = new FileReader();
-                profileReader.readAsDataURL(profileImgSource);
+                const profileReader = new FileReader(); // 파일리더 객체 호출
+                profileReader.readAsDataURL(profileImgSource); //바이너리 파일을 Base64 Encode 문자열로 반환
+                profileReader.onload = function(){ //	읽기 동작이 성공적으로 완료되었을 때, 함수 실행
+                    //화면상에 보이는 프로필 사진들을 변경
+                    profileImgList.forEach((profileImg) => {
+                        profileImg.src = profileReader.result;
+                    });
+                }
+                //선택한 파일의 파일명 추출
                 const files = profileElem.imgs.files;
 
                 const pData = new FormData();
@@ -124,9 +132,8 @@ if(feedObj) {
                     .then(myJson => {
                     console.log(myJson);
                     if(myJson) {                                
-                        profileBtnClose.click();
-                        
                     }
+                    profileBtnClose.click();
                     });
             }
         }); 

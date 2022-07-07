@@ -127,6 +127,7 @@
                         if(file_exists($path) && unlink($path)){
                             $param = ["iuser" => $loginUser->iuser, "delMainImg" => 1];
                             if($this->model->updUser($param)){
+                                rmdir("static/img/profile/{$loginUser->iuser}");
                                 $loginUser->mainimg = null;
                                 return [_RESULT => 1];
                             }
@@ -136,22 +137,28 @@
                     if(!is_array($_FILES) || !isset($_FILES["imgs"])) {
                         return [_RESULT => 0];
                     }
-                    $iuser = getLoginUser()->iuser;
-                    $profileImg = getMainImgSrc();
+                    $iuser = getLoginUser()->iuser; // iuser 값 받기
+                    $profileImg = getMainImgSrc(); // user/profileimg 파일명
+                    $loginUser = getLoginUser();
+                    $path = "static/img/profile/{$profileImg}"; // 이미지가 들어있는 폴더 경로
 
-                    $path = "static/img/profile/{$profileImg}";
-                    unlink($path);
+                    if(file_exists($path)){
+                        unlink($path);
+                    }
+
+                    
                     
                     $profileFiles = $_FILES["imgs"]["name"];
+
                     $saveDirectory = _IMG_PATH . "/profile/" . $iuser;
                     if(!is_dir($saveDirectory)) {
                         mkdir($saveDirectory, 0777, true);
                     }
 
-                    $loginUser = getLoginUser();
-                    if($loginUser && $loginUser->mainimg !== null){
+                    
+                    /*if($loginUser && $loginUser->mainimg !== null){
                         $path = "static/img/profile/{$loginUser->iuser}/{$loginUser->mainimg}";
-                        if(file_exists($path) && unlink($path)){}}
+                        if(file_exists($path) && unlink($path)){}}*/
                     
 
                     $tempName = $_FILES['imgs']['tmp_name'];
