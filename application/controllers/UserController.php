@@ -146,8 +146,6 @@
                         unlink($path);
                     }
 
-                    
-                    
                     $profileFiles = $_FILES["imgs"]["name"];
 
                     $saveDirectory = _IMG_PATH . "/profile/" . $iuser;
@@ -160,7 +158,6 @@
                         $path = "static/img/profile/{$loginUser->iuser}/{$loginUser->mainimg}";
                         if(file_exists($path) && unlink($path)){}}*/
                     
-
                     $tempName = $_FILES['imgs']['tmp_name'];
                     $randomFileNm = getRandomFileNm($profileFiles);
 

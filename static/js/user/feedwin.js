@@ -6,6 +6,7 @@ if(feedObj) {
 }
 
 (function() {
+    const delImg = document.querySelector('.delImg');
     const spanCntFollower = document.querySelector('#spanCntFollower');
     const lData = document.querySelector('#lData');
     const btnFollow = document.querySelector('#btnFollow');
@@ -79,6 +80,7 @@ if(feedObj) {
                 if(res.result){
                 }
                 btnProfileImgModalClose.click();
+                delImg.classList.add('d-none');
             })
         })
     }
@@ -91,6 +93,7 @@ if(feedObj) {
         const profileModal = document.querySelector('#upload');
         const profileElem = profileModal.querySelector('form');
         const profileBtnClose = document.querySelector('#btnProfileImgModalClose');
+        const delImg = document.querySelector('.delImg');
 
         //사진 업로드 버튼 선택
         const btnProfileMod = document.querySelector('#btnProfileMod');
@@ -134,6 +137,7 @@ if(feedObj) {
                     if(myJson) {                                
                     }
                     profileBtnClose.click();
+                    delImg.classList.remove('d-none');
                     });
             }
         }); 

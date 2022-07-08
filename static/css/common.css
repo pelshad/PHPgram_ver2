@@ -26,6 +26,7 @@ table { border-collapse: collapse; border-spacing: 0; }
 .div-top { border-top : 1px solid #e3e3e3; }
 
 .err { color: red; }
+.imgMax {width: 100%; height: 100%;}
 
 
 .h24 { height: 24px; }
