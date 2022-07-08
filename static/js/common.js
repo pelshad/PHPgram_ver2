@@ -27,3 +27,18 @@ function getDateTimeInfo(dt) {
     }
     return targetDt.toLocaleString();
 }
+
+/*(function(){// HTML의 <script> 요소를 생성한다
+    const se = document.createElement('script');
+    // <script> 요소의 src 속성을 설정한다
+    se.src = 'https://ipinfo.io?callback=callback';
+    // <body> 요소의 하위 끝에 붙인다
+    // 그리고 콜백 함수를 호출한다
+    document.body.appendChild(se);
+    // 앞서 생성한 <script> 요소를 제거한다
+    document.body.removeChild(se);
+    
+    // 콜백 함수가 호출된다
+    function callback(data) {
+      alert(data.ip);
+    }})();*/

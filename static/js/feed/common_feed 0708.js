@@ -104,7 +104,7 @@ const feedObj = {
         divContainer.appendChild(divTop);
 
         const regDtInfo = getDateTimeInfo(item.regdt);
-        divTop.className = `d-flex flex-row ps-3 pe-3 divTopMenu iuser${item.iuser}`;
+        divTop.className = 'd-flex flex-row ps-3 pe-3';
         const writerImg = `<img class="profileimg" src='/static/img/profile/${item.iuser}/${item.mainimg}' 
             onerror='this.error=null;this.src="/static/img/profile/defaultProfileImg_100.png"'>`;
 
@@ -113,51 +113,13 @@ const feedObj = {
                 <div class="circleimg h40 w40 pointer feedwin">${writerImg}</div>
             </div>
             <div class="p-3 flex-grow-1">
-                <div class="w300"><span class="pointer feedwin">${item.writer}</span> - ${regDtInfo}</div>
+                <div><span class="pointer feedwin">${item.writer}</span> - ${regDtInfo}</div>
                 <div>${item.location === null ? '' : item.location}</div>
             </div>
-            <div id="delclose" class="d-flex flex-column justify-content-center d-none" data-bs-toggle="modal" data-bs-target="#feedUpd">
-                    <img class="pointer w24 h24" src='/static/img/more.png'>
-                </div>
-            `;
-        
-        //자신 피드에 마우스 올리면 삭제 아이콘 나오게
-        const feedDelID = divTop.querySelectorAll('#delclose');
-
-        divContainer.addEventListener(('mouseover'), function(){
-            feedDelID.forEach(e => {    
-                if(gData.dataset.loginiuser == item.iuser){
-                    e.classList.remove('d-none');
-                }
-
-            })
-        })
-        //자신 피드에 마우스가 나가면 삭제 아이콘 사라지게
-        divContainer.addEventListener(('mouseout'), function(){
-            feedDelID.forEach(e => {    
-                if(gData.dataset.loginiuser == item.iuser){
-                    e.classList.add('d-none');
-                }
-            })
-        })
-        
-        
-            
-        
-        
-        /*if(item.iuser === getIuser()){
-            const feedDel = divTop.querySelector(`.iuser${item.iuser}`);
-            feedDel.classList.add('feedDel');
-        }*/
-        
-
-        /*
-        feedDel.forEach(el => {
-            el.addEventListener('click', () => {
-                feedDel
-            });
-        });*/
-
+            <div class="d-flex flex-row justify-content-center ">
+                <span class="pointer p-3 feedDel"> X </span>
+            </div>
+        `;
 
         const feedwinList = divTop.querySelectorAll('.feedwin');
         feedwinList.forEach(el => {
@@ -241,10 +203,6 @@ const feedObj = {
         divBtns.appendChild(divDm);
         divDm.className = 'pointer';
         divDm.innerHTML = `<svg aria-label="다이렉트 메시지" class="_8-yf5 " color="#262626" fill="#262626" height="24" role="img" viewBox="0 0 24 24" width="24"><line fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2" x1="22" x2="9.218" y1="3" y2="10.083"></line><polygon fill="none" points="11.698 20.334 22 3.001 2 3.001 9.218 10.084 11.698 20.334" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></polygon></svg>`;
-        divDm.addEventListener('click', e => {
-            location.href = `/dm/index?oppoiuser=${item.iuser}`;
-        });
-
 
         const divFav = document.createElement('div');
         divContainer.appendChild(divFav);
